@@ -16,8 +16,12 @@ This project was made for mainly for ***Ibda'a***, its main idea is to make it e
 
 ### What would you expect from this version? 
 
-This is a very early build of my app and is not finished. But it *is* where my core and base idea lies, updates will continue.
+This is a very early build of my app and is not finished. It definitely isn't my whole app. But it *is* where my core and base idea lies, updates will continue.
 
 ### What has already been done?
 
 Crucial logic for variables regarding the subatoms are done. this includes: *speed, radius, tilt,* etc. 3D Canvas are fully working and optimized enough for an early version. (beta)
+
+A simple introduction presenting my partners (Mawhiba, Maarif education & Noor Al-Islam High school) are given credits.
+
+<img width="2340" height="1080" alt="Screenshot_20261030_225058_OrbitalM3E" src="https://github.com/user-attachments/assets/44ac387e-d6d8-4aba-b614-e5e06d0eb688" />
