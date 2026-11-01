@@ -22,7 +22,7 @@ android {
     buildTypes {
         release {
             optimization {
-                enable = false
+                enable = true
             }
         }
     }
@@ -37,7 +37,7 @@ android {
 
 dependencies {
 
-    implementation("androidx.compose.material:material-icons-extended")
+    //implementation("androidx.compose.material:material-icons-extended")
     implementation("io.github.sceneview:sceneview:4.38.0")
 
     implementation(platform(libs.androidx.compose.bom))
