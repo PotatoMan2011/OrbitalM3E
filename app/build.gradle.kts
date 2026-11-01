@@ -17,6 +17,9 @@ android {
         versionName = "0.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Real phones only (64-bit + older 32-bit). Add "x86_64" back to run on a PC emulator.
+        ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a") }
     }
 
     buildTypes {

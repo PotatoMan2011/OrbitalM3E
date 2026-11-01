@@ -2,7 +2,7 @@
 
 **ARTIFICIAL INTELLIGENCE WAS USED** in this project. *(Claude and Gemini models)*
 
-Version 0.5 is done! Main logic is fully functional. 
+Main logic is fully functional! Grab the latest version from the [Releases](https://github.com/PotatoMan2011/OrbitalM3E/releases) page.
 
 This project was made mainly for ***Ibda'a***, its main idea is to make it easy for students and hobbyists to understand how atoms work by visualizing subshells and properties, for example. How adding a proton will change the element, an electron for an ion to form and a neutron to understand isotopes. All in a three-dimensional space to make it easy to understand.
 
