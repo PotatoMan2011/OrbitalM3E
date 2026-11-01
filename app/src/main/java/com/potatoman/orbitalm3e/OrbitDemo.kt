@@ -35,22 +35,22 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.unit.dp
 
-const val MAX_PROTONS = 36
-const val MAX_NEUTRONS = 39
-const val MAX_ELECTRONS = 36
+const val MAX_PROTONS = 54
+const val MAX_NEUTRONS = 57
+const val MAX_ELECTRONS = 54
 
 // Meters. x = right, y = up, z = toward the camera
 private val NUCLEUS_POSITION = Position(0f, 0f, 0f)
-private val PROTON_COLOR = Color(0xFF030EDC)
-private val NEUTRON_COLOR = Color(0xFF9E9E9E)
-private val ELECTRON_COLOR = Color(0xFFFF0000)
+private val PROTON_COLOR = Color(0xFF3A1B9E)
+private val NEUTRON_COLOR = Color(0xFF6E537B)
+private val ELECTRON_COLOR = Color(0xFF7F0B35)
 
 val MyCustomFont = FontFamily(
     Font(R.font.nunito_italic),
 )
 
-private const val NUCLEON_SIZE = 0.14f
-private const val ELECTRON_SIZE = 0.1f
+private const val NUCLEON_SIZE = 0.15f
+private const val ELECTRON_SIZE = 0.09f
 private const val SPHERE = "3DModels/sphere.glb"
 
 // One ring of electrons. speed in rad/s, tilt in degrees
@@ -68,14 +68,15 @@ private val SUBSHELLS = listOf(
     Subshell("2p", capacity = 6, radius = 0.95f, speed = 1.1f, tilt = -50f),
     Subshell("3s", capacity = 2, radius = 1.15f, speed = 0.9f, tilt = 70f),
     Subshell("3p", capacity = 6, radius = 1.35f, speed = 0.75f, tilt = -20f),
-    /*Subshell("4s", capacity = 2, radius = 1.55f, speed = 0.6f, tilt = 45f),
+    Subshell("4s", capacity = 2, radius = 1.55f, speed = 0.6f, tilt = 45f),
     Subshell("3d", capacity = 10,radius = 1.60f, speed = 0.5f, tilt = 60f),
     Subshell("4p", capacity = 6, radius = 1.75f, speed = 0.45f, tilt = -35f),
     Subshell("5s", capacity = 2, radius = 1.85f, speed = 0.4f, tilt = 80f),
     Subshell("4d", capacity = 10, radius = 1.9f, speed = 0.38f, tilt = -20f),
     Subshell("5p", capacity = 6, radius = 2f, speed = 0.35f, tilt = 90f),
 
-     */
+//commented out because of how heavy the app would be; performance would drop off a lot.
+
 )
 
 private fun fillSubshells(electrons: Int): List<Int> {
@@ -93,15 +94,19 @@ private fun ModelInstance.setColor(color: Color) {
     }
 }
 
-private fun nucleonOffset(k: Int, total: Int): Position {
-    if (total <= 1) return Position(0f, 0f, 0f)
-    val ballRadius = NUCLEON_SIZE * 0.55f * cbrt(total.toFloat())
-    val r = ballRadius * cbrt(k.toFloat() / total)
-    val y = 1f - 2f * ((k * 0.618034f) % 1f) // up/down, between -1 and 1
-    val ring = sqrt(1f - y * y)
-    val around = k * 2.399963f // golden angle in radians
-    return Position(cos(around) * ring * r, y * r, sin(around) * ring * r)
+private fun nucleonOffset(k: Int, total: Int): Position = NUCLEON_SLOTS[k]
+
+private val NUCLEON_SLOTS: List<Position> = run {
+    val spacing = NUCLEON_SIZE * 0.9f / sqrt(2f)   // neighbors sit sqrt(2) grid units apart
+    val slots = mutableListOf<Position>()
+    for (x in -4..4) for (y in -4..4) for (z in -4..4) {
+        if ((x + y + z) % 2 == 0) {
+            slots += Position(x * spacing, y * spacing, z * spacing)
+        }
+    }
+    slots.sortedBy { it.x * it.x + it.y * it.y + it.z * it.z }   // closest to center first
 }
+
 
 @Composable
 fun OrbitDemo(
@@ -272,6 +277,10 @@ fun OrbitDemo(
                       if (neutrons < protons + 3) neutrons++
                   }
           )
+
+          if (protons > 18) protons = 54
+          if (electrons > 18) electrons = 54
+
         //Debug ---------------------------------------------------------------
           Text(
               "protons: $protons \nelectrons: $electrons \nneutrons: $neutrons",

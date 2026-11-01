@@ -14,3 +14,6 @@
 .cxx
 local.properties
 .kotlin/
+
+# Built APKs (upload to GitHub Releases instead)
+app/release/

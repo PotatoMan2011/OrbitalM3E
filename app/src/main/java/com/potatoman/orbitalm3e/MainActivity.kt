@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
+/*
 @Composable
 fun testingDebugging(modelPath: String = "3DModels/atom.glb") {
 
@@ -101,3 +101,5 @@ fun GreetingPreview() {
         Greeting("Android")
     }
 }
+
+ */

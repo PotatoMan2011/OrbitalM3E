@@ -28,6 +28,7 @@ import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,9 +45,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.potatoman.orbitalm3e.ui.theme.OrbitalM3ETheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.IconButtonDefaults
+
+// For your skip variable (see below 👇)
+import androidx.compose.runtime.setValue
 
 @OptIn(ExperimentalTextApi::class)
 val Nunito = FontFamily(
@@ -77,6 +89,10 @@ fun OpeningScreen(onFinished: () -> Unit) {
     val titleAnim = remember { Animatable(0f) }
     val subtitleAnim = remember { Animatable(0f) }
     val screenAlpha = remember { Animatable(1f) }
+    val noteAnim = remember { Animatable(0f) }
+    val subNoteAnim = remember {Animatable(0f)}
+
+    //var skip = remember { mutableStateOf(false) }
 
     // slow spin for the shapes behind the logos
     val spin by rememberInfiniteTransition(label = "spin").animateFloat(
@@ -96,13 +112,28 @@ fun OpeningScreen(onFinished: () -> Unit) {
 
         delay(750)
         launch {
-            titleAnim.animateTo(1f, spring(Spring.DampingRatioHighBouncy, Spring.StiffnessLow))
+            titleAnim.animateTo(1f, spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow))
         }
         delay(200)
-        subtitleAnim.animateTo(1f, spring(Spring.DampingRatioHighBouncy, Spring.StiffnessLow))
+        subtitleAnim.animateTo(1f, spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow))
 
-        delay(5000)
+        delay(3800)
+        subtitleAnim.animateTo(0f, spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow))
+        titleAnim.animateTo(0f, spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow))
+        logoAnims.forEachIndexed { i, anim ->
+            launch {
+                delay(i * 180L)
+                anim.animateTo(0f, spring(dampingRatio = 0.3f, stiffness = Spring.StiffnessLow))
+            }
+        }
 
+        delay(2000)
+        noteAnim.animateTo(1f, spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow))
+
+        delay(1000)
+        subNoteAnim.animateTo(1f, spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow))
+
+        delay(18000)
         screenAlpha.animateTo(0f, tween(durationMillis = 650, easing = FastOutSlowInEasing))
         onFinished()
     }
@@ -118,13 +149,19 @@ fun OpeningScreen(onFinished: () -> Unit) {
             },
         contentAlignment = Alignment.Center
     ) {
+
+        TextButton(
+            onClick = { onFinished() },
+            modifier = Modifier.align(Alignment.BottomEnd).padding(24.dp)
+        ) { Text("Skip", fontFamily = Nunito) }
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(28.dp),
             modifier = Modifier.padding(24.dp)
         ) {
             Text(
-                "Presented for ibda'a\nSupported by Maarif Education | Noor al islam Highschool",
+                "Presented for ibda'a\nSupported by Maarif Education | Noor Al-Islam High school",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.enterUp(titleAnim.value)
@@ -173,7 +210,7 @@ fun OpeningScreen(onFinished: () -> Unit) {
             )
 
             Text(
-                "OrbitalM3E — Made by Muhammad Fawwaz",
+                "OrbitalM3E — Made by Muhammad Al-Sunaikh",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.enterUp(subtitleAnim.value)
@@ -181,6 +218,33 @@ fun OpeningScreen(onFinished: () -> Unit) {
 
             LoadingIndicator(modifier = Modifier.enterUp(subtitleAnim.value))
         }
+        Column(Modifier
+            .fillMaxSize()
+            .align(Alignment.TopStart)) {
+            Text(
+                "NOTE:",
+                fontFamily = Nunito,
+                style = MaterialTheme.typography.displaySmall,
+                fontSize = 34.sp,
+                color = MaterialTheme.colorScheme.primary,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .enterUp(noteAnim.value)
+                    .padding(all = 30.dp)
+            )
+
+    Text(
+        "This program will never be 100% accurate; for instance, an atom is almost entirely empty space\nand an electron is much smaller than its other subatomic particles, this app looks forward to help students and hobbyists understand atoms, subshells and properties better. Not accurately draw an atom.\n\nExpect bugs and unexpected behaviour!",
+        style = MaterialTheme.typography.bodyLarge,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.enterUp(subNoteAnim.value)
+            .padding(start = 30.dp)
+            .padding(bottom = 50.dp)
+    )
+}
+
+
+
     }
 }
 
@@ -188,6 +252,11 @@ fun OpeningScreen(onFinished: () -> Unit) {
 private fun Modifier.enterUp(progress: Float) = graphicsLayer {
     alpha = progress.coerceIn(0f, 1f)
     translationY = (1f - progress) * 60f
+}
+
+private fun Modifier.enterDown(progress: Float) = graphicsLayer {
+    alpha = progress.coerceIn(0f, 1f)
+    translationY = (1f - progress) * -60f
 }
 
 @Preview(showBackground = true)
