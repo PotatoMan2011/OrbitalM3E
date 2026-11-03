@@ -1,6 +1,9 @@
 # OrbitalM3E
 
-**ARTIFICIAL INTELLIGENCE WAS USED** in this project. *(Claude and Gemini models)*
+### Development tools
+* **Language, Framework & IDE:** Kotlin, Jetpack Compose, Android Studio
+* **Design Principles:** Material 3 Expressive UI
+* **LLM Assistance:** Claude Code & Gemini (Utilized for syntax optimization, debugging, and data structure analysis)
 
 Main logic is fully functional! Grab the latest version from the [Releases](https://github.com/PotatoMan2011/OrbitalM3E/releases) page.
 
